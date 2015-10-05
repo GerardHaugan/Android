@@ -122,5 +122,5 @@ public void onCreate(Bundle icicle) {
 
 The settings print the required string format successfully.
 
-![Image of Settings] (https://github.com/GerardHaugan/Android/build_system/Settings.png)
+![Image of Settings] (https://github.com/GerardHaugan/Android/blob/master/build_system/Settings.png)
 
