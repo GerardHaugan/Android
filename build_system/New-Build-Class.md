@@ -3,17 +3,17 @@
 - Description
   - An extra field is needed to be provided by class Build exposing the current SW version in a specific format.
 - Requirements
-  ##### OEM must:
+##### OEM must:
   - Create a new class com.xxx.os.Build extending android.os.Build
   - The class must be provided in library com.xxx.os
   - This new class must add field public static final String SW_VERSION
   - This field must be populated with a string identifying the current SW version
-  - The string format must be: <Android release version>/<Android build string>/<OEM string>
-  ##### Rules for <OEMString>
+  - The string format must be: `<Android release version>/<Android build string>/<OEM string>`
+##### Rules for <OEMString>
   - It cannot contain slash ("/") character
-  - It must be formatted as follows: <Vendor name><sp><some vendor specific string>
-  ##### *Example: 4.4.2/KOT49H/OEM ABCDEFG1234*
-** **
+  - It must be formatted as follows: `<Vendor name><sp><some vendor specific string>`
+##### *Example: 4.4.2/KOT49H/OEM ABCDEFG1234*
+****
 # Description and implementation
 
 - frameworks/base/core/java/com/xxx/os/Build.java
