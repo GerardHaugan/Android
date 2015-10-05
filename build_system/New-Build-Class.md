@@ -3,6 +3,8 @@
 - Description
   - An extra field is needed to be provided by class Build exposing the current SW version in a specific format.
 - Requirements
+
+
 ##### OEM must:
   - Create a new class com.xxx.os.Build extending android.os.Build
   - The class must be provided in library com.xxx.os
@@ -11,7 +13,7 @@
   - The string format must be: `<Android release version>/<Android build string>/<OEM string>`
 
 
-##### Rules for `<OEMString>`
+##### Rules for `<OEM string>`
   - It cannot contain slash ("/") character
   - It must be formatted as follows: `<Vendor name><sp><some vendor specific string>`
 
@@ -20,7 +22,10 @@
 
 
 
-# Description and implementation
+## Description and implementation
+
+
+To comply with the requirements, we create a new class com.xxx.os.Build as follows.
 
 - frameworks/base/core/java/com/xxx/os/Build.java
 ```javascript
@@ -48,6 +53,35 @@ public class Build extends android.os.Build
     }   
 }
 ```
+
+And from above, we summarize the requirements:
+
+1. Create a new class com.xxx.os.Build that extends android.os.Build
+ - > `public class Build extends android.os.Build`
+ > On an AOSP source code, Build.java is located at path framework/base/core/java/
+ > android/os/Build.java. In order to create a new class Build that extends existed one, we create a new class at path framework/base/core/java/com/xxx/os/Build.java and extends the old one.
+
+
+2. The class must be provided in library com.xxx.os
+  - > `package com.xxx.os;`
+  > The class has to be provided at library com.xxx.os, so we use package to create the class under the package.
+
+  3. Add field public static final String SW_VERSION whose format must be formatted as `<Android release version>/<Android build string>/<OEM string>`. Also, `<OEM string>` has to be formatted as `<Vendor name><sp><some vendor specific string>`.
+   - > `public static final String SW_VERSION = deriveSW_VERSION();`
+   > We declare a public static final String SW_VERSION and call the method deriveSW_VERSION() to comply with the required format.
+   - > ` public static String deriveSW_VERSION() {
+           String version = getString("ro.build.version.release") + '/' +
+	                    getString("ro.build.id") + '/' +
+			    getString("ro.product.oem") + ' ' +
+                            getString("ro.build.string");			           return version;
+	}`
+
+    > From the method deriveSW_VERSION(), we can derive the string from the system properties defined at build/tool/buildinfo.sh (https://android.googlesource.com/platform/build/+/master/tools/buildinfo.sh) 
+    
+    > NOTE: we define ro.build.string to set vendor specific string. We describe it below.
+
+
+#### To get vendor specific string, we declare **ro.build.string** and assign a variable **OEM_VENDOR_STRING** at path build/tools/buildinfo.sh. Also, we have to define the variable as follows.
 
 - build/tools/buildinfo.sh
 ``` sh
@@ -77,6 +111,12 @@ OEM_VENDOR_STRING=ABCDEFG1234
             ...
             bash $(BUILDINFO_SH) >> $@
 ```
+
+Then, we can create a new class and define the required fields or methods.
+
+
+##### *** How to vadicate our implement does work? Here, we do not write an extra application to test the result. Instead, we use the existed code about settings to import our new class and replace some output string to show if it work. Just for your reference.
+
 
 - packages/apps/Settings/src/com/android/settings/deviceinfo/SoftwareInformationFragment.java
 
