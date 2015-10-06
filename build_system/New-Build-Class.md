@@ -60,33 +60,33 @@ From above, we summarize:
 1. Create a new class com.xxx.os.Build that extends android.os.Build
  - `public class Build extends android.os.Build`
 
-...On an AOSP source code, Build.java is located at path framework/base/core/java/android/os/Build.java. In order to create a new class Build that extends existed one, we create a new class at path framework/base/core/java/com/xxx/os/Build.java and extends the old one.
+> On an AOSP source code, Build.java is located at path framework/base/core/java/android/os/Build.java. In order to create a new class Build that extends existed one, we create a new class at path framework/base/core/java/com/xxx/os/Build.java and extends the old one.
 
 
 2. The class must be provided in library com.xxx.os
  - `package com.xxx.os;`
 
-...The class has to be provided at library com.xxx.os, so we use package to create the class under the package.
+> The class has to be provided at library com.xxx.os, so we use package to create the class under the package.
 
-3. Add field public static final String SW_VERSION whose format must be formatted as `<Android release version>/<Android build string>/<OEM string>`. Also, `<OEM string>` has to be formatted as `<Vendor name><sp><some vendor specific string>`.
-   
-   
+3. Add field public static final String SW_VERSION whose format must be formatted as `<Android release version>/<Android build string>/<OEM string>`. Also, `<OEM string>` has to be formatted as `<Vendor name><sp><some vendor specific string>`
  - `public static final String SW_VERSION = deriveSW_VERSION();`
 
-...We declare a public static final String SW_VERSION and call the method deriveSW_VERSION() to comply with the required format.
+> We declare a public static final String SW_VERSION and call the method deriveSW_VERSION() to comply with the required format.
    
- - ` public static String deriveSW_VERSION() {
+ - ``` javascript
+   public static String deriveSW_VERSION() {
            String version = getString("ro.build.version.release") + '/' +
 	                    getString("ro.build.id") + '/' +
 			    getString("ro.product.oem") + ' ' +
                             getString("ro.build.string");
            return version;
-	}`
+	}
+   ```
 
-...From the method deriveSW_VERSION(), we can derive the string from the system properties defined at build/tool/buildinfo.sh (https://android.googlesource.com/platform/build/+/master/tools/buildinfo.sh)..
+
+> From the method deriveSW_VERSION(), we can derive the string from the system properties defined at build/tool/buildinfo.sh (https://android.googlesource.com/platform/build/+/master/tools/buildinfo.sh)
     
-...NOTE: we define ro.build.string to set vendor specific string. We describe it below...
-
+NOTE: we define ro.build.string to set vendor specific string. We describe it below
 
 
 ##### To get vendor specific string, we declare **ro.build.string** and assign a variable **OEM_VENDOR_STRING** at path build/tools/buildinfo.sh. Also, we have to define the variable as follows.
