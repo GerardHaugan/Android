@@ -62,7 +62,6 @@ From above, we summarize:
 
 > On an AOSP source code, Build.java is located at path framework/base/core/java/android/os/Build.java. In order to create a new class Build that extends existed one, we create a new class at path framework/base/core/java/com/xxx/os/Build.java and extends the old one.
 
-
 2. The class must be provided in library com.xxx.os
  - `package com.xxx.os;`
 
@@ -83,7 +82,6 @@ From above, we summarize:
 	}
    ```
 
-
 > From the method deriveSW_VERSION(), we can derive the string from the system properties defined at build/tool/buildinfo.sh (https://android.googlesource.com/platform/build/+/master/tools/buildinfo.sh)
     
 NOTE: we define ro.build.string to set vendor specific string. We describe it below
@@ -91,13 +89,15 @@ NOTE: we define ro.build.string to set vendor specific string. We describe it be
 
 ##### To get vendor specific string, we declare **ro.build.string** and assign a variable **OEM_VENDOR_STRING** at path build/tools/buildinfo.sh. Also, we have to define the variable as follows.
 
-- build/tools/buildinfo.sh
+ - build/tools/buildinfo.sh
+
 ``` sh
 echo "ro.build.string=$OEM_VENDOR_STRING"
 ```
 
-- build/core/Makefile
-``` sh
+ - build/core/Makefile
+
+```
 OEM_VENDOR_STRING=ABCDEFG1234
 ```
 
